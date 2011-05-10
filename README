@@ -2,9 +2,25 @@ accessBySSL
 version 1.0
 
 指定したドキュメントをSSLアクセスに変更する。
-うまくいかない場合もあるかも。。。
+かなり強引な方法なので、うまくいかない場合もあるかも。。。
+その場合は症状と状況をご連絡いただければ検討します。
 
 【インストール】
 1. 「プラグインを作成」画面を開き、「プラグインコード(PHP)」にplugin.accessBySSL.phpの内容をコピー＆ペーストする
-2. assets/plugins/ディレクトリ内にassets/plugins/accessBySSLディレクトリをコピー（アップロード）する
-3. 以上
+2. 「設定」タブ内の「プラグイン設定」に以下のコードをコピー＆ペーストし、「パラメータ表示の更新」ボタンをクリックする
+   &ids=書き換えるドキュメントID(コンマ区切り);int;1 &append=追加する文字列;text;https://;
+3. assets/plugins/ディレクトリ内にassets/plugins/accessBySSLディレクトリをコピー（アップロード）する
+
+【設定】
+プラグイン設定内の「書き換えるドキュメントID(コンマ区切り)」に、SSLアクセスさせたいドキュメントのIDを指定。（複数の場合は半角コンマ区切り）
+管理画面左側のツリーを見れば、各ドキュメントのIDが分かります。
+
+「追加する文字列」欄に、SSLアクセス時に”通常アクセス時とは異なる部分（ドメイン名を含む）”を指定する。
+（例）
+・ドメイン名: example.com
+・SSLアクセスさせたいURL: http://www.example.com/contact.html
+・SSLアクセスした場合のURL: https://www.example.com/contact.html
+上記の場合、
+専有SSLの場合、指定値は「https://www.example.com」となります。
+ドメイン名が異なる共有SSL（例えばCORESERVER）の場合、指定値は「https://ss1.coressl.jp/www.example.com」です。
+
