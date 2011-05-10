@@ -1,0 +1,10 @@
+accessBySSL
+version 1.0
+
+指定したドキュメントをSSLアクセスに変更する。
+うまくいかない場合もあるかも。。。
+
+【インストール】
+1. 「プラグインを作成」画面を開き、「プラグインコード(PHP)」にplugin.accessBySSL.phpの内容をコピー＆ペーストする
+2. assets/plugins/ディレクトリ内にassets/plugins/accessBySSLディレクトリをコピー（アップロード）する
+3. 以上
