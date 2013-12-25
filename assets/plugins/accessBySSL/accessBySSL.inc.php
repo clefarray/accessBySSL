@@ -12,7 +12,7 @@ class accessBySSL {
 
   function accessBySSL($ids = '', $append = '') {
     $this->ids = explode(',', $ids);
-    $this->append = $append;
+    $this->append = trim($append,'/');
   }
 
   function process() {
@@ -24,8 +24,9 @@ class accessBySSL {
 
     foreach ($this->ids as $id) {
       $link = $modx->makeUrl($id, '', '','full'); // Since 1.0.12J
-      $link = $modx->config['base_url'] . str_replace($modx->config['site_url'],'',$link);
-      $output = preg_replace("|(https?://{$http_host})?/?" . substr($link, 1) . "|", $this->append . $link, $output);
+      $base_url = trim($modx->config['base_url'],'/');
+      $link = $base_url . str_replace($modx->config['site_url'],'',$link);
+      $output = preg_replace("|(https?://{$http_host})?/?{$link}|", "{$this->append}/{$link}", $output);
     }
 
     if (in_array($modx->documentIdentifier, $this->ids)) {
