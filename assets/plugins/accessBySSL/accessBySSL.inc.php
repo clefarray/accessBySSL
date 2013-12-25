@@ -21,7 +21,7 @@ class accessBySSL {
     $output = &$modx->documentOutput;
 
     foreach ($this->ids as $id) {
-      $link = $modx->makeUrl($id, '', '');
+      $link = $modx->makeUrl($id, '', '','absolute'); // Since 1.0.12J
       $output = preg_replace("|(https?:\/\/".$_SERVER['HTTP_HOST'].")?\/?" . substr($link, 1) . "|", $this->append . $link, $output);
     }
 
