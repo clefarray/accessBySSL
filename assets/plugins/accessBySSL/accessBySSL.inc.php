@@ -23,7 +23,8 @@ class accessBySSL {
     $http_host = substr($http_host,0,strrpos($http_host,'/'));
 
     foreach ($this->ids as $id) {
-      $link = $modx->makeUrl($id, '', '','absolute'); // Since 1.0.12J
+      $link = $modx->makeUrl($id, '', '','full'); // Since 1.0.12J
+      $link = $modx->config['base_url'] . str_replace($modx->config['site_url'],'',$link);
       $output = preg_replace("|(https?:\/\/".$http_host.")?\/?" . substr($link, 1) . "|", $this->append . $link, $output);
     }
 
