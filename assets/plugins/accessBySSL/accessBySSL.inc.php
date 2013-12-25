@@ -29,7 +29,7 @@ class accessBySSL {
 
     if (in_array($modx->documentIdentifier, $this->ids)) {
       $output = preg_replace("/<base href=(\"|\')(.+)(\"|\')/", "<base href=\"" . $this->append . "/\"", $output);
-      if(strpos($output,'/manager/')!==false) $output = preg_replace("/\/manager\//", "manager/", $output);
+      if(strpos($output,'/manager/')!==false) $output = preg_replace("@/manager/@", "manager/", $output);
       $output = preg_replace("/<a([\s\w\d=\"\']+)href=(\"|\')\/(.+?)(\"|\')/im", "<a$1href=\"http://".$http_host."/$3\"", $output);
       $output = preg_replace("/<a([\s\w\d=\"\']+)href=\"https?:\/\/".$http_host."\/(https?:\/\/.+)\"/", "<a$1href=\"$2\"", $output);
     }
