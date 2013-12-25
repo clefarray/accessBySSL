@@ -19,17 +19,19 @@ class accessBySSL {
     global $modx;
 
     $output = &$modx->documentOutput;
+    $http_host = substr($modx->config['site_url'],strpos($modx->config['site_url'],'://')+3);
+    $http_host = substr($http_host,0,strrpos($http_host,'/'));
 
     foreach ($this->ids as $id) {
       $link = $modx->makeUrl($id, '', '','absolute'); // Since 1.0.12J
-      $output = preg_replace("|(https?:\/\/".$_SERVER['HTTP_HOST'].")?\/?" . substr($link, 1) . "|", $this->append . $link, $output);
+      $output = preg_replace("|(https?:\/\/".$http_host.")?\/?" . substr($link, 1) . "|", $this->append . $link, $output);
     }
 
     if (in_array($modx->documentIdentifier, $this->ids)) {
       $output = preg_replace("/<base href=(\"|\')(.+)(\"|\')/", "<base href=\"" . $this->append . "/\"", $output);
       if(strpos($output,'/manager/')!==false) $output = preg_replace("/\/manager\//", "manager/", $output);
-      $output = preg_replace("/<a([\s\w\d=\"\']+)href=(\"|\')\/(.+?)(\"|\')/im", "<a$1href=\"http://".$_SERVER['HTTP_HOST']."/$3\"", $output);
-      $output = preg_replace("/<a([\s\w\d=\"\']+)href=\"https?:\/\/".$_SERVER['HTTP_HOST']."\/(https?:\/\/.+)\"/", "<a$1href=\"$2\"", $output);
+      $output = preg_replace("/<a([\s\w\d=\"\']+)href=(\"|\')\/(.+?)(\"|\')/im", "<a$1href=\"http://".$http_host."/$3\"", $output);
+      $output = preg_replace("/<a([\s\w\d=\"\']+)href=\"https?:\/\/".$http_host."\/(https?:\/\/.+)\"/", "<a$1href=\"$2\"", $output);
     }
     
   }
