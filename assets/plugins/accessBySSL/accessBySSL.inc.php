@@ -12,24 +12,28 @@ class accessBySSL {
 
   function accessBySSL($ids = '', $append = '') {
     $this->ids = explode(',', $ids);
-    $this->append = $append;
+    $this->append = trim($append,'/');
   }
 
   function process() {
     global $modx;
 
     $output = &$modx->documentOutput;
+    $http_host = substr($modx->config['site_url'],strpos($modx->config['site_url'],'://')+3);
+    $http_host = substr($http_host,0,strrpos($http_host,'/'));
 
     foreach ($this->ids as $id) {
-      $link = $modx->makeUrl($id, '', '');
-      $output = preg_replace("|(https?:\/\/".$_SERVER['HTTP_HOST'].")?\/?" . substr($link, 1) . "|", $this->append . $link, $output);
+      $link = $modx->makeUrl($id, '', '','full'); // Since 1.0.12J
+      $base_url = trim($modx->config['base_url'],'/');
+      $link = $base_url . str_replace($modx->config['site_url'],'',$link);
+      $output = preg_replace("|(https?://{$http_host})?/?{$link}|", "{$this->append}/{$link}", $output);
     }
 
     if (in_array($modx->documentIdentifier, $this->ids)) {
       $output = preg_replace("/<base href=(\"|\')(.+)(\"|\')/", "<base href=\"" . $this->append . "/\"", $output);
-      $output = preg_replace("/\/manager\//", "manager/", $output);
-      $output = preg_replace("/<a([\s\w\d=\"\']+)href=(\"|\')\/?(.+?)(\"|\')/im", "<a$1href=\"http://".$_SERVER['HTTP_HOST']."/$3\"", $output);
-      $output = preg_replace("/<a([\s\w\d=\"\']+)href=\"https?:\/\/".$_SERVER['HTTP_HOST']."\/(https?:\/\/.+)\"/", "<a$1href=\"$2\"", $output);
+      if(strpos($output,'/manager/')!==false) $output = preg_replace("@/manager/@", "manager/", $output);
+      $output = preg_replace("/<a([\s\w\d=\"\']+)href=(\"|\')\/(.+?)(\"|\')/im", "<a$1href=\"http://".$http_host."/$3\"", $output);
+      $output = preg_replace("/<a([\s\w\d=\"\']+)href=\"https?:\/\/".$http_host."\/(https?:\/\/.+)\"/", "<a$1href=\"$2\"", $output);
     }
     
   }
